@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пассажирам.РФ</title>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .mobile-app {
+            width: 390px;
+            height: 844px;
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            border-radius: 30px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .header { background: #0056b3; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; flex-grow: 1; }
+        input, select, button {
+            width: 100%; padding: 12px; margin-bottom: 15px;
+            border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;
+        }
+        button { background: #0056b3; color: white; border: none; font-weight: bold; cursor: pointer;}
+        button:hover { background: #004494; }
+        .error { color: red; font-size: 12px; margin-top: -10px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="mobile-app">
+        <div class="header">
+            <h2>Пассажирам.РФ</h2>
+        </div>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
