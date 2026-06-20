@@ -1,15 +1,26 @@
 {% extends 'core/base.html' %}
+
 {% block content %}
-    <h3 style="text-align:center;">Авторизация</h3>
+    <div style="text-align: center; margin-bottom: 24px;">
+        <h3 style="margin: 0; font-size: 24px; color: var(--primary-color);">Вход в систему</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 5px;">Добро пожаловать в Пассажирам.РФ</p>
+    </div>
+
     {% if form.errors %}
-        <p class="error">Неправильный логин или пароль!</p>
+        <div class="errorlist" style="text-align: center; font-weight: bold;">
+            Неправильный логин или пароль!
+        </div>
     {% endif %}
+
     <form method="POST">
         {% csrf_token %}
+        
         {{ form.as_p }}
+        
         <button type="submit">Войти</button>
     </form>
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="{% url 'register' %}" style="text-decoration:none; color:#0056b3;">Еще не зарегистрированы? Регистрация</a>
+    
+    <div style="text-align: center; margin-top: 24px;">
+        <a href="{% url 'register' %}" style="font-size: 14px;">Ещё не зарегистрированы? Создать аккаунт</a>
     </div>
 {% endblock %}

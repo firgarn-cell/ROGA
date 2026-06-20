@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h3 style="margin: 0; font-size: 20px; color: var(--primary-color);">Новая заявка</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 5px;">Выберите курс и удобное время</p>
+    </div>
+
+    {% if form.errors %}
+        <ul class="errorlist">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить заявку</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'dashboard' %}" style="font-size: 14px; color: var(--text-muted);">← Назад</a>
+    </div>
+{% endblock %}
