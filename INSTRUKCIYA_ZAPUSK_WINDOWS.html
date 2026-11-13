@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Инструкция: запуск ROGA на Windows</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --text: #1a1d23;
+      --muted: #5c6570;
+      --accent: #0b6e4f;
+      --accent-soft: #e6f4ef;
+      --border: #d8dee6;
+      --code-bg: #1e2430;
+      --code-text: #e8edf5;
+      --warn-bg: #fff8e6;
+      --warn-border: #e6c35c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0b6e4f 0%, #14532d 55%, #1a3a2a 100%);
+      color: #fff;
+      padding: 2.2rem 1.25rem 2rem;
+    }
+
+    header .wrap,
+    main.wrap,
+    footer.wrap {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    header h1 {
+      margin: 0 0 0.4rem;
+      font-size: 1.85rem;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.92;
+      max-width: 40rem;
+    }
+
+    main.wrap {
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    nav.toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    nav.toc h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1rem;
+    }
+
+    nav.toc ol {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    nav.toc a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    nav.toc a:hover { text-decoration: underline; }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem 1.4rem;
+      margin-bottom: 1.1rem;
+    }
+
+    section h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.25rem;
+      color: var(--accent);
+    }
+
+    section h3 {
+      margin: 1.1rem 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    p, li { color: var(--text); }
+    .muted { color: var(--muted); }
+
+    ul, ol { padding-left: 1.3rem; }
+    li { margin: 0.35rem 0; }
+
+    code, kbd {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.92em;
+    }
+
+    code.inline {
+      background: var(--accent-soft);
+      color: #0a4d38;
+      padding: 0.12rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    kbd {
+      background: #eef1f5;
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      padding: 0.05rem 0.35rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 0.95rem 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 0.7rem 0 0.9rem;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    .note {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 0;
+      margin: 0.8rem 0;
+    }
+
+    .warn {
+      background: var(--warn-bg);
+      border-left: 4px solid var(--warn-border);
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 0;
+      margin: 0.8rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.7rem 0 0.3rem;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+    }
+
+    th {
+      background: #f0f3f7;
+    }
+
+    .checklist label {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      margin: 0.4rem 0;
+      cursor: default;
+    }
+
+    footer {
+      padding: 0 1.25rem 2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media print {
+      body { background: #fff; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      section, nav.toc { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Пассажирам.РФ (ROGA) — запуск на Windows</h1>
+      <p>Пошаговая инструкция для запуска проекта из папки на компьютере с Windows. Git клонировать не обязательно — достаточно открытой папки проекта.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav class="toc" aria-label="Содержание">
+      <h2>Содержание</h2>
+      <ol>
+        <li><a href="#what">Что это за проект</a></li>
+        <li><a href="#need">Что установить</a></li>
+        <li><a href="#folder">Как найти папку проекта</a></li>
+        <li><a href="#run">Запуск (пошагово)</a></li>
+        <li><a href="#pages">Адреса страниц</a></li>
+        <li><a href="#daily">Повторный запуск</a></li>
+        <li><a href="#problems">Частые проблемы</a></li>
+        <li><a href="#check">Чеклист</a></li>
+      </ol>
+    </nav>
+
+    <section id="what">
+      <h2>1. Что это за проект</h2>
+      <p>Веб-приложение на <strong>Django</strong> для регистрации пользователей и подачи заявок на обучение пассажиров городского транспорта.</p>
+      <ul>
+        <li>Регистрация и вход</li>
+        <li>Личный кабинет с историей заявок</li>
+        <li>Создание заявки (вид транспорта, дата, оплата)</li>
+        <li>Админ-панель Django</li>
+      </ul>
+      <p class="muted">База данных по умолчанию — SQLite (файл <code class="inline">db.sqlite3</code> создаётся автоматически в папке проекта).</p>
+    </section>
+
+    <section id="need">
+      <h2>2. Что установить</h2>
+      <ol>
+        <li>
+          <strong>Python 3.11 или новее</strong> (лучше 3.12).<br>
+          Скачать: <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a>
+        </li>
+        <li>
+          При установке обязательно поставьте галочку
+          <strong>«Add python.exe to PATH»</strong>.
+        </li>
+        <li>
+          После установки откройте <strong>Командную строку</strong> или <strong>PowerShell</strong> и проверьте:
+        </li>
+      </ol>
+      <pre><code>python --version
+pip --version</code></pre>
+      <div class="note">
+        Если команда <code class="inline">python</code> не найдена, попробуйте <code class="inline">py --version</code>
+        и дальше везде заменяйте <code class="inline">python</code> на <code class="inline">py</code>.
+      </div>
+    </section>
+
+    <section id="folder">
+      <h2>3. Как найти папку проекта</h2>
+      <p>Папка проекта — та, где лежат файлы:</p>
+      <ul>
+        <li><code class="inline">manage.py</code></li>
+        <li><code class="inline">requirements.txt</code></li>
+        <li>папки <code class="inline">config</code> и <code class="inline">core</code></li>
+      </ul>
+      <p>Пример пути:</p>
+      <pre><code>C:\Users\Имя\Desktop\ROGA</code></pre>
+      <p>Или любой другой диск/каталог, куда вы скопировали проект.</p>
+
+      <h3>Как открыть терминал сразу в этой папке</h3>
+      <ol>
+        <li>Откройте папку в Проводнике Windows.</li>
+        <li>Кликните по адресуной строке Проводника, введите <code class="inline">cmd</code> и нажмите <kbd>Enter</kbd>
+          <br><span class="muted">или в пустом месте папки: Shift + ПКМ → «Открыть окно PowerShell здесь».</span></li>
+      </ol>
+      <p>Либо вручную:</p>
+      <pre><code>cd /d C:\путь\к\вашей\папке\ROGA</code></pre>
+      <div class="warn">
+        Все команды ниже выполняйте <strong>из корня проекта</strong> (там, где лежит <code class="inline">manage.py</code>).
+      </div>
+    </section>
+
+    <section id="run">
+      <h2>4. Запуск (пошагово)</h2>
+
+      <h3>Шаг 1. Создать виртуальное окружение</h3>
+      <pre><code>python -m venv venv</code></pre>
+      <p class="muted">Появится папка <code class="inline">venv</code> — это изолированная установка Python для проекта.</p>
+
+      <h3>Шаг 2. Активировать окружение</h3>
+      <p><strong>Командная строка (cmd):</strong></p>
+      <pre><code>venv\Scripts\activate.bat</code></pre>
+      <p><strong>PowerShell:</strong></p>
+      <pre><code>venv\Scripts\Activate.ps1</code></pre>
+      <div class="note">
+        После активации в начале строки появится префикс <code class="inline">(venv)</code>.
+        Если PowerShell пишет про запрет скриптов, один раз выполните:
+        <pre><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code></pre>
+        затем снова <code class="inline">venv\Scripts\Activate.ps1</code>.
+      </div>
+
+      <h3>Шаг 3. Установить зависимости</h3>
+      <pre><code>pip install -r requirements.txt</code></pre>
+      <p>Установятся Django и Pillow.</p>
+
+      <h3>Шаг 4. Применить миграции (создать БД)</h3>
+      <pre><code>python manage.py migrate</code></pre>
+      <p>В папке проекта появится файл <code class="inline">db.sqlite3</code>.</p>
+
+      <h3>Шаг 5. Создать администратора (по желанию)</h3>
+      <p>Нужен для входа в <code class="inline">/admin/</code>:</p>
+      <pre><code>python manage.py createsuperuser</code></pre>
+      <div class="warn">
+        Логин должен быть не короче 6 символов и содержать <strong>только латинские буквы и цифры</strong>
+        (без пробелов и кириллицы) — так устроена модель пользователя в проекте.
+      </div>
+
+      <h3>Шаг 6. Запустить сервер</h3>
+      <pre><code>python manage.py runserver</code></pre>
+      <p>Откройте браузер и перейдите по адресу:</p>
+      <pre><code>http://127.0.0.1:8000/</code></pre>
+      <p>Остановка сервера: <kbd>Ctrl</kbd> + <kbd>C</kbd> в окне терминала.</p>
+    </section>
+
+    <section id="pages">
+      <h2>5. Адреса страниц</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Адрес</th>
+            <th>Что открывается</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="inline">http://127.0.0.1:8000/</code></td>
+            <td>Вход</td>
+          </tr>
+          <tr>
+            <td><code class="inline">http://127.0.0.1:8000/register/</code></td>
+            <td>Регистрация</td>
+          </tr>
+          <tr>
+            <td><code class="inline">http://127.0.0.1:8000/dashboard/</code></td>
+            <td>Личный кабинет</td>
+          </tr>
+          <tr>
+            <td><code class="inline">http://127.0.0.1:8000/apply/</code></td>
+            <td>Новая заявка</td>
+          </tr>
+          <tr>
+            <td><code class="inline">http://127.0.0.1:8000/admin/</code></td>
+            <td>Админ-панель</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note">
+        Страницы кабинета и заявки требуют входа. Сначала зарегистрируйтесь или войдите на главной
+        (<code class="inline">/</code>, затем переходите в кабинет.
+      </div>
+    </section>
+
+    <section id="daily">
+      <h2>6. Повторный запуск (каждый следующий раз)</h2>
+      <p>После первой настройки достаточно трёх действий:</p>
+      <pre><code>cd /d C:\путь\к\вашей\папке\ROGA
+venv\Scripts\activate.bat
+python manage.py runserver</code></pre>
+      <p class="muted">В PowerShell вместо <code class="inline">activate.bat</code> используйте <code class="inline">Activate.ps1</code>.</p>
+      <p>Миграции и <code class="inline">pip install</code> повторять не нужно, пока не меняли зависимости или модели.</p>
+    </section>
+
+    <section id="problems">
+      <h2>7. Частые проблемы на Windows</h2>
+      <h3>«python не является внутренней или внешней командой»</h3>
+      <ul>
+        <li>Переустановите Python с галочкой <strong>Add to PATH</strong>.</li>
+        <li>Или используйте лаунчер: <code class="inline">py -m venv venv</code>, <code class="inline">py manage.py runserver</code>.</li>
+      </ul>
+
+      <h3>Ошибка политики выполнения в PowerShell</h3>
+      <pre><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code></pre>
+      <p>Либо работайте через <strong>cmd</strong> и <code class="inline">venv\Scripts\activate.bat</code>.</p>
+
+      <h3>«No module named django»</h3>
+      <p>Окружение не активировано. Снова выполните активацию <code class="inline">venv</code> и проверьте, что в начале строки есть <code class="inline">(venv)</code>.</p>
+
+      <h3>Порт 8000 занят</h3>
+      <pre><code>python manage.py runserver 8080</code></pre>
+      <p>Тогда сайт: <code class="inline">http://127.0.0.1:8080/</code></p>
+
+      <h3>Не создаётся суперпользователь / ошибка логина</h3>
+      <p>Логин: минимум 6 символов, только <code class="inline">a-z</code>, <code class="inline">A-Z</code>, <code class="inline">0-9</code>.</p>
+    </section>
+
+    <section id="check">
+      <h2>8. Чеклист быстрого старта</h2>
+      <div class="checklist">
+        <label><input type="checkbox" disabled> Python установлен, <code class="inline">python --version</code> работает</label>
+        <label><input type="checkbox" disabled> Терминал открыт в папке с <code class="inline">manage.py</code></label>
+        <label><input type="checkbox" disabled> Создан и активирован <code class="inline">venv</code></label>
+        <label><input type="checkbox" disabled> Выполнено <code class="inline">pip install -r requirements.txt</code></label>
+        <label><input type="checkbox" disabled> Выполнено <code class="inline">python manage.py migrate</code></label>
+        <label><input type="checkbox" disabled> Запущен <code class="inline">python manage.py runserver</code></label>
+        <label><input type="checkbox" disabled> В браузере открыт <code class="inline">http://127.0.0.1:8000/</code></label>
+      </div>
+
+      <h3>Все команды одним блоком (первый запуск, cmd)</h3>
+      <pre><code>cd /d C:\путь\к\вашей\папке\ROGA
+python -m venv venv
+venv\Scripts\activate.bat
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver</code></pre>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>Учебный проект ROGA («Пассажирам.РФ»). Файл можно открыть двойным щелчком в браузере — интернет для просмотра инструкции не нужен.</p>
+  </footer>
+</body>
+</html>
