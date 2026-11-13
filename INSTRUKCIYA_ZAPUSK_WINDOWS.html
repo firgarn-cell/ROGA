@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ROGA — установка и настройка через PowerShell</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --text: #1a1d23;
+      --muted: #5c6570;
+      --accent: #0b6e4f;
+      --accent-soft: #e6f4ef;
+      --border: #d8dee6;
+      --code-bg: #1e2430;
+      --code-text: #e8edf5;
+      --warn-bg: #fff8e6;
+      --warn-border: #e6c35c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0b6e4f 0%, #14532d 55%, #1a3a2a 100%);
+      color: #fff;
+      padding: 2.2rem 1.25rem 2rem;
+    }
+
+    header .wrap,
+    main.wrap,
+    footer.wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header h1 {
+      margin: 0 0 0.4rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.92;
+      max-width: 42rem;
+    }
+
+    main.wrap { padding: 1.5rem 1.25rem 3rem; }
+
+    nav.toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    nav.toc h2 { margin: 0 0 0.6rem; font-size: 1rem; }
+    nav.toc ol { margin: 0; padding-left: 1.25rem; }
+    nav.toc a { color: var(--accent); text-decoration: none; }
+    nav.toc a:hover { text-decoration: underline; }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem 1.4rem;
+      margin-bottom: 1.1rem;
+    }
+
+    section h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.25rem;
+      color: var(--accent);
+    }
+
+    section h3 {
+      margin: 1.15rem 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .muted { color: var(--muted); }
+    ul, ol { padding-left: 1.3rem; }
+    li { margin: 0.35rem 0; }
+
+    code, kbd {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.92em;
+    }
+
+    code.inline {
+      background: var(--accent-soft);
+      color: #0a4d38;
+      padding: 0.12rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    kbd {
+      background: #eef1f5;
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      padding: 0.05rem 0.35rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 0.95rem 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 0.7rem 0 0.9rem;
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    pre code { background: none; color: inherit; padding: 0; }
+
+    .note {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 0;
+      margin: 0.8rem 0;
+    }
+
+    .warn {
+      background: var(--warn-bg);
+      border-left: 4px solid var(--warn-border);
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 0;
+      margin: 0.8rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.7rem 0 0.3rem;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+    }
+
+    th { background: #f0f3f7; }
+
+    .step-num {
+      display: inline-block;
+      min-width: 1.6rem;
+      height: 1.6rem;
+      line-height: 1.6rem;
+      text-align: center;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 0.35rem;
+    }
+
+    footer {
+      padding: 0 1.25rem 2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media print {
+      body { background: #fff; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      section, nav.toc { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Пассажирам.РФ (ROGA) — PowerShell</h1>
+      <p>Полная установка, настройка и запуск проекта из локальной папки на Windows <strong>только через PowerShell</strong>.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav class="toc" aria-label="Содержание">
+      <h2>Содержание</h2>
+      <ol>
+        <li><a href="#open-ps">Открыть PowerShell</a></li>
+        <li><a href="#python">Установить Python</a></li>
+        <li><a href="#policy">Разрешить скрипты venv</a></li>
+        <li><a href="#project">Перейти в папку проекта</a></li>
+        <li><a href="#venv">Создать и активировать venv</a></li>
+        <li><a href="#deps">Установить зависимости</a></li>
+        <li><a href="#db">Миграции и админ</a></li>
+        <li><a href="#run">Запуск сервера</a></li>
+        <li><a href="#all">Весь скрипт целиком</a></li>
+        <li><a href="#daily">Повторный запуск</a></li>
+        <li><a href="#pages">Страницы сайта</a></li>
+        <li><a href="#problems">Ошибки PowerShell</a></li>
+      </ol>
+    </nav>
+
+    <section id="open-ps">
+      <h2><span class="step-num">1</span> Открыть PowerShell</h2>
+      <p>Любой удобный способ:</p>
+      <ul>
+        <li>Клавиша <kbd>Win</kbd>, введите <strong>PowerShell</strong>, откройте <strong>Windows PowerShell</strong> или <strong>Terminal</strong>.</li>
+        <li>В Проводнике зайдите в папку проекта → в адресной строке наберите <code class="inline">powershell</code> → <kbd>Enter</kbd>.</li>
+        <li>Или: Shift + ПКМ по пустому месту в папке → «Открыть окно PowerShell здесь».</li>
+      </ul>
+      <div class="note">
+        Админ-права обычно <strong>не нужны</strong>, кроме установки Python через <code class="inline">winget</code> (иногда спрашивает подтверждение UAC).
+      </div>
+    </section>
+
+    <section id="python">
+      <h2><span class="step-num">2</span> Установить Python (если ещё нет)</h2>
+
+      <h3>Проверка</h3>
+      <pre><code>python --version
+py --version
+pip --version</code></pre>
+      <p class="muted">Нужен Python <strong>3.11+</strong> (лучше 3.12). Если команда не найдена — ставим ниже.</p>
+
+      <h3>Установка через winget (рекомендуется)</h3>
+      <pre><code>winget install Python.Python.3.12 --accept-package-agreements --accept-source-agreements</code></pre>
+      <p>После установки <strong>закройте и снова откройте PowerShell</strong>, затем проверьте:</p>
+      <pre><code>python --version
+pip --version</code></pre>
+
+      <h3>Если winget недоступен</h3>
+      <ol>
+        <li>Скачайте установщик: <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a></li>
+        <li>Обязательно включите галочку <strong>Add python.exe to PATH</strong></li>
+        <li>Снова откройте PowerShell и проверьте версии</li>
+      </ol>
+
+      <div class="warn">
+        Если работает только <code class="inline">py</code>, а <code class="inline">python</code> — нет, дальше можно везде писать
+        <code class="inline">py</code> вместо <code class="inline">python</code>
+        (например: <code class="inline">py -m venv venv</code>).
+      </div>
+    </section>
+
+    <section id="policy">
+      <h2><span class="step-num">3</span> Разрешить активацию venv в PowerShell</h2>
+      <p>Без этого часто бывает ошибка про «выполнение сценариев отключено».</p>
+      <pre><code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code></pre>
+      <p>На вопрос подтверждения введите <code class="inline">Y</code> и нажмите <kbd>Enter</kbd>.</p>
+      <p class="muted">Достаточно сделать один раз на этом пользователе Windows.</p>
+    </section>
+
+    <section id="project">
+      <h2><span class="step-num">4</span> Перейти в папку проекта</h2>
+      <p>Папка должна содержать <code class="inline">manage.py</code>, <code class="inline">requirements.txt</code>, каталоги <code class="inline">config</code> и <code class="inline">core</code>.</p>
+      <pre><code># Подставьте свой путь:
+Set-Location "C:\Users\Имя\Desktop\ROGA"
+
+# Проверка, что вы в нужном месте:
+Get-ChildItem manage.py, requirements.txt</code></pre>
+      <div class="note">
+        Если путь с пробелами — кавычки обязательны.
+        Пример: <code class="inline">Set-Location "D:\Учёба\Проекты\ROGA"</code>
+      </div>
+    </section>
+
+    <section id="venv">
+      <h2><span class="step-num">5</span> Создать и активировать виртуальное окружение</h2>
+      <pre><code>python -m venv venv
+.\venv\Scripts\Activate.ps1</code></pre>
+      <p>В начале строки должно появиться <code class="inline">(venv)</code>.</p>
+      <p>Проверка интерпретатора из venv:</p>
+      <pre><code>Get-Command python | Format-List
+python -c "import sys; print(sys.executable)"</code></pre>
+      <p class="muted">Путь должен указывать внутрь папки <code class="inline">...\ROGA\venv\Scripts\python.exe</code>.</p>
+    </section>
+
+    <section id="deps">
+      <h2><span class="step-num">6</span> Установить зависимости</h2>
+      <pre><code>python -m pip install --upgrade pip
+python -m pip install -r requirements.txt</code></pre>
+      <p>Будут установлены Django и Pillow. Проверка:</p>
+      <pre><code>python -c "import django; print('Django', django.get_version())"</code></pre>
+    </section>
+
+    <section id="db">
+      <h2><span class="step-num">7</span> Миграции БД и суперпользователь</h2>
+      <pre><code>python manage.py migrate
+python manage.py check</code></pre>
+      <p>В корне проекта появится файл <code class="inline">db.sqlite3</code>.</p>
+
+      <h3>Администратор для /admin/ (по желанию)</h3>
+      <pre><code>python manage.py createsuperuser</code></pre>
+      <div class="warn">
+        Логин: минимум 6 символов, только латинские буквы и цифры
+        (без кириллицы и пробелов). Дальше PowerShell спросит email и пароль.
+      </div>
+    </section>
+
+    <section id="run">
+      <h2><span class="step-num">8</span> Запуск сервера</h2>
+      <pre><code>python manage.py runserver</code></pre>
+      <p>Откройте в браузере:</p>
+      <pre><code>http://127.0.0.1:8000/</code></pre>
+      <p>Остановка: <kbd>Ctrl</kbd> + <kbd>C</kbd>.</p>
+      <p>Другой порт (если 8000 занят):</p>
+      <pre><code>python manage.py runserver 8080</code></pre>
+      <p>Доступ с других устройств в сети (осторожно, только для учёбы в локалке):</p>
+      <pre><code>python manage.py runserver 0.0.0.0:8000</code></pre>
+    </section>
+
+    <section id="all">
+      <h2><span class="step-num">9</span> Весь скрипт первого запуска (скопировать в PowerShell)</h2>
+      <p>Замените путь в первой строке на свой, затем вставьте блок целиком:</p>
+      <pre><code># === ROGA: первая установка через PowerShell ===
+
+# 0) (один раз) разрешить Activate.ps1
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+# 1) перейти в папку проекта
+Set-Location "C:\Users\Имя\Desktop\ROGA"
+
+# 2) виртуальное окружение
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# 3) зависимости
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+# 4) база данных
+python manage.py migrate
+python manage.py check
+
+# 5) админ (интерактивно: логин / email / пароль)
+# python manage.py createsuperuser
+
+# 6) сервер
+python manage.py runserver</code></pre>
+      <div class="note">
+        Строку с <code class="inline">createsuperuser</code> раскомментируйте, когда будете готовы ввести логин и пароль вручную.
+        Пока сервер запущен, это окно PowerShell занято — так и должно быть.
+      </div>
+    </section>
+
+    <section id="daily">
+      <h2><span class="step-num">10</span> Повторный запуск (каждый раз)</h2>
+      <pre><code>Set-Location "C:\Users\Имя\Desktop\ROGA"
+.\venv\Scripts\Activate.ps1
+python manage.py runserver</code></pre>
+      <p>Выйти из venv:</p>
+      <pre><code>deactivate</code></pre>
+      <p class="muted"><code class="inline">pip install</code> и <code class="inline">migrate</code> снова нужны только если обновили зависимости или модели.</p>
+    </section>
+
+    <section id="pages">
+      <h2>Страницы после запуска</h2>
+      <table>
+        <thead>
+          <tr><th>Адрес</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code class="inline">http://127.0.0.1:8000/</code></td><td>Вход</td></tr>
+          <tr><td><code class="inline">http://127.0.0.1:8000/register/</code></td><td>Регистрация</td></tr>
+          <tr><td><code class="inline">http://127.0.0.1:8000/dashboard/</code></td><td>Личный кабинет</td></tr>
+          <tr><td><code class="inline">http://127.0.0.1:8000/apply/</code></td><td>Новая заявка</td></tr>
+          <tr><td><code class="inline">http://127.0.0.1:8000/admin/</code></td><td>Админ-панель</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="problems">
+      <h2>Частые ошибки в PowerShell</h2>
+
+      <h3>python / pip не найдены</h3>
+      <pre><code>winget install Python.Python.3.12 --accept-package-agreements --accept-source-agreements
+# затем ЗАКРОЙТЕ и откройте PowerShell снова
+py --version
+py -m pip --version</code></pre>
+
+      <h3>ExecutionPolicy / «выполнение сценариев отключено»</h3>
+      <pre><code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+.\venv\Scripts\Activate.ps1</code></pre>
+
+      <h3>No module named django</h3>
+      <p>Не активирован venv. Снова:</p>
+      <pre><code>.\venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt</code></pre>
+
+      <h3>Порт занят</h3>
+      <pre><code>python manage.py runserver 8080</code></pre>
+
+      <h3>Проверить, что сервер слушает порт</h3>
+      <pre><code>Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue |
+  Select-Object LocalAddress, LocalPort, State, OwningProcess</code></pre>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>Учебный проект ROGA («Пассажирам.РФ»). Откройте этот HTML двойным щелчком — для просмотра инструкции интернет не нужен. Команды копируйте в PowerShell.</p>
+  </footer>
+</body>
+</html>
