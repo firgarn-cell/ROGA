@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Инструкция: запуск ROGA на Windows</title>
+  <title>ROGA — установка и настройка через PowerShell</title>
   <style>
     :root {
       --bg: #f7f8fa;
@@ -38,25 +38,23 @@
     header .wrap,
     main.wrap,
     footer.wrap {
-      max-width: 860px;
+      max-width: 900px;
       margin: 0 auto;
     }
 
     header h1 {
       margin: 0 0 0.4rem;
-      font-size: 1.85rem;
+      font-size: 1.75rem;
       font-weight: 700;
     }
 
     header p {
       margin: 0;
       opacity: 0.92;
-      max-width: 40rem;
+      max-width: 42rem;
     }
 
-    main.wrap {
-      padding: 1.5rem 1.25rem 3rem;
-    }
+    main.wrap { padding: 1.5rem 1.25rem 3rem; }
 
     nav.toc {
       background: var(--card);
@@ -66,21 +64,9 @@
       margin-bottom: 1.5rem;
     }
 
-    nav.toc h2 {
-      margin: 0 0 0.6rem;
-      font-size: 1rem;
-    }
-
-    nav.toc ol {
-      margin: 0;
-      padding-left: 1.25rem;
-    }
-
-    nav.toc a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
+    nav.toc h2 { margin: 0 0 0.6rem; font-size: 1rem; }
+    nav.toc ol { margin: 0; padding-left: 1.25rem; }
+    nav.toc a { color: var(--accent); text-decoration: none; }
     nav.toc a:hover { text-decoration: underline; }
 
     section {
@@ -98,13 +84,11 @@
     }
 
     section h3 {
-      margin: 1.1rem 0 0.5rem;
+      margin: 1.15rem 0 0.5rem;
       font-size: 1.05rem;
     }
 
-    p, li { color: var(--text); }
     .muted { color: var(--muted); }
-
     ul, ol { padding-left: 1.3rem; }
     li { margin: 0.35rem 0; }
 
@@ -135,15 +119,11 @@
       border-radius: 8px;
       overflow-x: auto;
       margin: 0.7rem 0 0.9rem;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       line-height: 1.45;
     }
 
-    pre code {
-      background: none;
-      color: inherit;
-      padding: 0;
-    }
+    pre code { background: none; color: inherit; padding: 0; }
 
     .note {
       background: var(--accent-soft);
@@ -174,16 +154,20 @@
       text-align: left;
     }
 
-    th {
-      background: #f0f3f7;
-    }
+    th { background: #f0f3f7; }
 
-    .checklist label {
-      display: flex;
-      gap: 0.55rem;
-      align-items: flex-start;
-      margin: 0.4rem 0;
-      cursor: default;
+    .step-num {
+      display: inline-block;
+      min-width: 1.6rem;
+      height: 1.6rem;
+      line-height: 1.6rem;
+      text-align: center;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 0.35rem;
     }
 
     footer {
@@ -202,8 +186,8 @@
 <body>
   <header>
     <div class="wrap">
-      <h1>Пассажирам.РФ (ROGA) — запуск на Windows</h1>
-      <p>Пошаговая инструкция для запуска проекта из папки на компьютере с Windows. Git клонировать не обязательно — достаточно открытой папки проекта.</p>
+      <h1>Пассажирам.РФ (ROGA) — PowerShell</h1>
+      <p>Полная установка, настройка и запуск проекта из локальной папки на Windows <strong>только через PowerShell</strong>.</p>
     </div>
   </header>
 
@@ -211,215 +195,219 @@
     <nav class="toc" aria-label="Содержание">
       <h2>Содержание</h2>
       <ol>
-        <li><a href="#what">Что это за проект</a></li>
-        <li><a href="#need">Что установить</a></li>
-        <li><a href="#folder">Как найти папку проекта</a></li>
-        <li><a href="#run">Запуск (пошагово)</a></li>
-        <li><a href="#pages">Адреса страниц</a></li>
+        <li><a href="#open-ps">Открыть PowerShell</a></li>
+        <li><a href="#python">Установить Python</a></li>
+        <li><a href="#policy">Разрешить скрипты venv</a></li>
+        <li><a href="#project">Перейти в папку проекта</a></li>
+        <li><a href="#venv">Создать и активировать venv</a></li>
+        <li><a href="#deps">Установить зависимости</a></li>
+        <li><a href="#db">Миграции и админ</a></li>
+        <li><a href="#run">Запуск сервера</a></li>
+        <li><a href="#all">Весь скрипт целиком</a></li>
         <li><a href="#daily">Повторный запуск</a></li>
-        <li><a href="#problems">Частые проблемы</a></li>
-        <li><a href="#check">Чеклист</a></li>
+        <li><a href="#pages">Страницы сайта</a></li>
+        <li><a href="#problems">Ошибки PowerShell</a></li>
       </ol>
     </nav>
 
-    <section id="what">
-      <h2>1. Что это за проект</h2>
-      <p>Веб-приложение на <strong>Django</strong> для регистрации пользователей и подачи заявок на обучение пассажиров городского транспорта.</p>
+    <section id="open-ps">
+      <h2><span class="step-num">1</span> Открыть PowerShell</h2>
+      <p>Любой удобный способ:</p>
       <ul>
-        <li>Регистрация и вход</li>
-        <li>Личный кабинет с историей заявок</li>
-        <li>Создание заявки (вид транспорта, дата, оплата)</li>
-        <li>Админ-панель Django</li>
+        <li>Клавиша <kbd>Win</kbd>, введите <strong>PowerShell</strong>, откройте <strong>Windows PowerShell</strong> или <strong>Terminal</strong>.</li>
+        <li>В Проводнике зайдите в папку проекта → в адресной строке наберите <code class="inline">powershell</code> → <kbd>Enter</kbd>.</li>
+        <li>Или: Shift + ПКМ по пустому месту в папке → «Открыть окно PowerShell здесь».</li>
       </ul>
-      <p class="muted">База данных по умолчанию — SQLite (файл <code class="inline">db.sqlite3</code> создаётся автоматически в папке проекта).</p>
-    </section>
-
-    <section id="need">
-      <h2>2. Что установить</h2>
-      <ol>
-        <li>
-          <strong>Python 3.11 или новее</strong> (лучше 3.12).<br>
-          Скачать: <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a>
-        </li>
-        <li>
-          При установке обязательно поставьте галочку
-          <strong>«Add python.exe to PATH»</strong>.
-        </li>
-        <li>
-          После установки откройте <strong>Командную строку</strong> или <strong>PowerShell</strong> и проверьте:
-        </li>
-      </ol>
-      <pre><code>python --version
-pip --version</code></pre>
       <div class="note">
-        Если команда <code class="inline">python</code> не найдена, попробуйте <code class="inline">py --version</code>
-        и дальше везде заменяйте <code class="inline">python</code> на <code class="inline">py</code>.
+        Админ-права обычно <strong>не нужны</strong>, кроме установки Python через <code class="inline">winget</code> (иногда спрашивает подтверждение UAC).
       </div>
     </section>
 
-    <section id="folder">
-      <h2>3. Как найти папку проекта</h2>
-      <p>Папка проекта — та, где лежат файлы:</p>
-      <ul>
-        <li><code class="inline">manage.py</code></li>
-        <li><code class="inline">requirements.txt</code></li>
-        <li>папки <code class="inline">config</code> и <code class="inline">core</code></li>
-      </ul>
-      <p>Пример пути:</p>
-      <pre><code>C:\Users\Имя\Desktop\ROGA</code></pre>
-      <p>Или любой другой диск/каталог, куда вы скопировали проект.</p>
+    <section id="python">
+      <h2><span class="step-num">2</span> Установить Python (если ещё нет)</h2>
 
-      <h3>Как открыть терминал сразу в этой папке</h3>
+      <h3>Проверка</h3>
+      <pre><code>python --version
+py --version
+pip --version</code></pre>
+      <p class="muted">Нужен Python <strong>3.11+</strong> (лучше 3.12). Если команда не найдена — ставим ниже.</p>
+
+      <h3>Установка через winget (рекомендуется)</h3>
+      <pre><code>winget install Python.Python.3.12 --accept-package-agreements --accept-source-agreements</code></pre>
+      <p>После установки <strong>закройте и снова откройте PowerShell</strong>, затем проверьте:</p>
+      <pre><code>python --version
+pip --version</code></pre>
+
+      <h3>Если winget недоступен</h3>
       <ol>
-        <li>Откройте папку в Проводнике Windows.</li>
-        <li>Кликните по адресуной строке Проводника, введите <code class="inline">cmd</code> и нажмите <kbd>Enter</kbd>
-          <br><span class="muted">или в пустом месте папки: Shift + ПКМ → «Открыть окно PowerShell здесь».</span></li>
+        <li>Скачайте установщик: <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a></li>
+        <li>Обязательно включите галочку <strong>Add python.exe to PATH</strong></li>
+        <li>Снова откройте PowerShell и проверьте версии</li>
       </ol>
-      <p>Либо вручную:</p>
-      <pre><code>cd /d C:\путь\к\вашей\папке\ROGA</code></pre>
+
       <div class="warn">
-        Все команды ниже выполняйте <strong>из корня проекта</strong> (там, где лежит <code class="inline">manage.py</code>).
+        Если работает только <code class="inline">py</code>, а <code class="inline">python</code> — нет, дальше можно везде писать
+        <code class="inline">py</code> вместо <code class="inline">python</code>
+        (например: <code class="inline">py -m venv venv</code>).
+      </div>
+    </section>
+
+    <section id="policy">
+      <h2><span class="step-num">3</span> Разрешить активацию venv в PowerShell</h2>
+      <p>Без этого часто бывает ошибка про «выполнение сценариев отключено».</p>
+      <pre><code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code></pre>
+      <p>На вопрос подтверждения введите <code class="inline">Y</code> и нажмите <kbd>Enter</kbd>.</p>
+      <p class="muted">Достаточно сделать один раз на этом пользователе Windows.</p>
+    </section>
+
+    <section id="project">
+      <h2><span class="step-num">4</span> Перейти в папку проекта</h2>
+      <p>Папка должна содержать <code class="inline">manage.py</code>, <code class="inline">requirements.txt</code>, каталоги <code class="inline">config</code> и <code class="inline">core</code>.</p>
+      <pre><code># Подставьте свой путь:
+Set-Location "C:\Users\Имя\Desktop\ROGA"
+
+# Проверка, что вы в нужном месте:
+Get-ChildItem manage.py, requirements.txt</code></pre>
+      <div class="note">
+        Если путь с пробелами — кавычки обязательны.
+        Пример: <code class="inline">Set-Location "D:\Учёба\Проекты\ROGA"</code>
+      </div>
+    </section>
+
+    <section id="venv">
+      <h2><span class="step-num">5</span> Создать и активировать виртуальное окружение</h2>
+      <pre><code>python -m venv venv
+.\venv\Scripts\Activate.ps1</code></pre>
+      <p>В начале строки должно появиться <code class="inline">(venv)</code>.</p>
+      <p>Проверка интерпретатора из venv:</p>
+      <pre><code>Get-Command python | Format-List
+python -c "import sys; print(sys.executable)"</code></pre>
+      <p class="muted">Путь должен указывать внутрь папки <code class="inline">...\ROGA\venv\Scripts\python.exe</code>.</p>
+    </section>
+
+    <section id="deps">
+      <h2><span class="step-num">6</span> Установить зависимости</h2>
+      <pre><code>python -m pip install --upgrade pip
+python -m pip install -r requirements.txt</code></pre>
+      <p>Будут установлены Django и Pillow. Проверка:</p>
+      <pre><code>python -c "import django; print('Django', django.get_version())"</code></pre>
+    </section>
+
+    <section id="db">
+      <h2><span class="step-num">7</span> Миграции БД и суперпользователь</h2>
+      <pre><code>python manage.py migrate
+python manage.py check</code></pre>
+      <p>В корне проекта появится файл <code class="inline">db.sqlite3</code>.</p>
+
+      <h3>Администратор для /admin/ (по желанию)</h3>
+      <pre><code>python manage.py createsuperuser</code></pre>
+      <div class="warn">
+        Логин: минимум 6 символов, только латинские буквы и цифры
+        (без кириллицы и пробелов). Дальше PowerShell спросит email и пароль.
       </div>
     </section>
 
     <section id="run">
-      <h2>4. Запуск (пошагово)</h2>
-
-      <h3>Шаг 1. Создать виртуальное окружение</h3>
-      <pre><code>python -m venv venv</code></pre>
-      <p class="muted">Появится папка <code class="inline">venv</code> — это изолированная установка Python для проекта.</p>
-
-      <h3>Шаг 2. Активировать окружение</h3>
-      <p><strong>Командная строка (cmd):</strong></p>
-      <pre><code>venv\Scripts\activate.bat</code></pre>
-      <p><strong>PowerShell:</strong></p>
-      <pre><code>venv\Scripts\Activate.ps1</code></pre>
-      <div class="note">
-        После активации в начале строки появится префикс <code class="inline">(venv)</code>.
-        Если PowerShell пишет про запрет скриптов, один раз выполните:
-        <pre><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code></pre>
-        затем снова <code class="inline">venv\Scripts\Activate.ps1</code>.
-      </div>
-
-      <h3>Шаг 3. Установить зависимости</h3>
-      <pre><code>pip install -r requirements.txt</code></pre>
-      <p>Установятся Django и Pillow.</p>
-
-      <h3>Шаг 4. Применить миграции (создать БД)</h3>
-      <pre><code>python manage.py migrate</code></pre>
-      <p>В папке проекта появится файл <code class="inline">db.sqlite3</code>.</p>
-
-      <h3>Шаг 5. Создать администратора (по желанию)</h3>
-      <p>Нужен для входа в <code class="inline">/admin/</code>:</p>
-      <pre><code>python manage.py createsuperuser</code></pre>
-      <div class="warn">
-        Логин должен быть не короче 6 символов и содержать <strong>только латинские буквы и цифры</strong>
-        (без пробелов и кириллицы) — так устроена модель пользователя в проекте.
-      </div>
-
-      <h3>Шаг 6. Запустить сервер</h3>
+      <h2><span class="step-num">8</span> Запуск сервера</h2>
       <pre><code>python manage.py runserver</code></pre>
-      <p>Откройте браузер и перейдите по адресу:</p>
+      <p>Откройте в браузере:</p>
       <pre><code>http://127.0.0.1:8000/</code></pre>
-      <p>Остановка сервера: <kbd>Ctrl</kbd> + <kbd>C</kbd> в окне терминала.</p>
+      <p>Остановка: <kbd>Ctrl</kbd> + <kbd>C</kbd>.</p>
+      <p>Другой порт (если 8000 занят):</p>
+      <pre><code>python manage.py runserver 8080</code></pre>
+      <p>Доступ с других устройств в сети (осторожно, только для учёбы в локалке):</p>
+      <pre><code>python manage.py runserver 0.0.0.0:8000</code></pre>
     </section>
 
-    <section id="pages">
-      <h2>5. Адреса страниц</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Адрес</th>
-            <th>Что открывается</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code class="inline">http://127.0.0.1:8000/</code></td>
-            <td>Вход</td>
-          </tr>
-          <tr>
-            <td><code class="inline">http://127.0.0.1:8000/register/</code></td>
-            <td>Регистрация</td>
-          </tr>
-          <tr>
-            <td><code class="inline">http://127.0.0.1:8000/dashboard/</code></td>
-            <td>Личный кабинет</td>
-          </tr>
-          <tr>
-            <td><code class="inline">http://127.0.0.1:8000/apply/</code></td>
-            <td>Новая заявка</td>
-          </tr>
-          <tr>
-            <td><code class="inline">http://127.0.0.1:8000/admin/</code></td>
-            <td>Админ-панель</td>
-          </tr>
-        </tbody>
-      </table>
+    <section id="all">
+      <h2><span class="step-num">9</span> Весь скрипт первого запуска (скопировать в PowerShell)</h2>
+      <p>Замените путь в первой строке на свой, затем вставьте блок целиком:</p>
+      <pre><code># === ROGA: первая установка через PowerShell ===
+
+# 0) (один раз) разрешить Activate.ps1
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+# 1) перейти в папку проекта
+Set-Location "C:\Users\Имя\Desktop\ROGA"
+
+# 2) виртуальное окружение
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# 3) зависимости
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+# 4) база данных
+python manage.py migrate
+python manage.py check
+
+# 5) админ (интерактивно: логин / email / пароль)
+# python manage.py createsuperuser
+
+# 6) сервер
+python manage.py runserver</code></pre>
       <div class="note">
-        Страницы кабинета и заявки требуют входа. Сначала зарегистрируйтесь или войдите на главной
-        (<code class="inline">/</code>, затем переходите в кабинет.
+        Строку с <code class="inline">createsuperuser</code> раскомментируйте, когда будете готовы ввести логин и пароль вручную.
+        Пока сервер запущен, это окно PowerShell занято — так и должно быть.
       </div>
     </section>
 
     <section id="daily">
-      <h2>6. Повторный запуск (каждый следующий раз)</h2>
-      <p>После первой настройки достаточно трёх действий:</p>
-      <pre><code>cd /d C:\путь\к\вашей\папке\ROGA
-venv\Scripts\activate.bat
+      <h2><span class="step-num">10</span> Повторный запуск (каждый раз)</h2>
+      <pre><code>Set-Location "C:\Users\Имя\Desktop\ROGA"
+.\venv\Scripts\Activate.ps1
 python manage.py runserver</code></pre>
-      <p class="muted">В PowerShell вместо <code class="inline">activate.bat</code> используйте <code class="inline">Activate.ps1</code>.</p>
-      <p>Миграции и <code class="inline">pip install</code> повторять не нужно, пока не меняли зависимости или модели.</p>
+      <p>Выйти из venv:</p>
+      <pre><code>deactivate</code></pre>
+      <p class="muted"><code class="inline">pip install</code> и <code class="inline">migrate</code> снова нужны только если обновили зависимости или модели.</p>
+    </section>
+
+    <section id="pages">
+      <h2>Страницы после запуска</h2>
+      <table>
+        <thead>
+          <tr><th>Адрес</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code class="inline">http://127.0.0.1:8000/</code></td><td>Вход</td></tr>
+          <tr><td><code class="inline">http://127.0.0.1:8000/register/</code></td><td>Регистрация</td></tr>
+          <tr><td><code class="inline">http://127.0.0.1:8000/dashboard/</code></td><td>Личный кабинет</td></tr>
+          <tr><td><code class="inline">http://127.0.0.1:8000/apply/</code></td><td>Новая заявка</td></tr>
+          <tr><td><code class="inline">http://127.0.0.1:8000/admin/</code></td><td>Админ-панель</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="problems">
-      <h2>7. Частые проблемы на Windows</h2>
-      <h3>«python не является внутренней или внешней командой»</h3>
-      <ul>
-        <li>Переустановите Python с галочкой <strong>Add to PATH</strong>.</li>
-        <li>Или используйте лаунчер: <code class="inline">py -m venv venv</code>, <code class="inline">py manage.py runserver</code>.</li>
-      </ul>
+      <h2>Частые ошибки в PowerShell</h2>
 
-      <h3>Ошибка политики выполнения в PowerShell</h3>
-      <pre><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code></pre>
-      <p>Либо работайте через <strong>cmd</strong> и <code class="inline">venv\Scripts\activate.bat</code>.</p>
+      <h3>python / pip не найдены</h3>
+      <pre><code>winget install Python.Python.3.12 --accept-package-agreements --accept-source-agreements
+# затем ЗАКРОЙТЕ и откройте PowerShell снова
+py --version
+py -m pip --version</code></pre>
 
-      <h3>«No module named django»</h3>
-      <p>Окружение не активировано. Снова выполните активацию <code class="inline">venv</code> и проверьте, что в начале строки есть <code class="inline">(venv)</code>.</p>
+      <h3>ExecutionPolicy / «выполнение сценариев отключено»</h3>
+      <pre><code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+.\venv\Scripts\Activate.ps1</code></pre>
 
-      <h3>Порт 8000 занят</h3>
+      <h3>No module named django</h3>
+      <p>Не активирован venv. Снова:</p>
+      <pre><code>.\venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt</code></pre>
+
+      <h3>Порт занят</h3>
       <pre><code>python manage.py runserver 8080</code></pre>
-      <p>Тогда сайт: <code class="inline">http://127.0.0.1:8080/</code></p>
 
-      <h3>Не создаётся суперпользователь / ошибка логина</h3>
-      <p>Логин: минимум 6 символов, только <code class="inline">a-z</code>, <code class="inline">A-Z</code>, <code class="inline">0-9</code>.</p>
-    </section>
-
-    <section id="check">
-      <h2>8. Чеклист быстрого старта</h2>
-      <div class="checklist">
-        <label><input type="checkbox" disabled> Python установлен, <code class="inline">python --version</code> работает</label>
-        <label><input type="checkbox" disabled> Терминал открыт в папке с <code class="inline">manage.py</code></label>
-        <label><input type="checkbox" disabled> Создан и активирован <code class="inline">venv</code></label>
-        <label><input type="checkbox" disabled> Выполнено <code class="inline">pip install -r requirements.txt</code></label>
-        <label><input type="checkbox" disabled> Выполнено <code class="inline">python manage.py migrate</code></label>
-        <label><input type="checkbox" disabled> Запущен <code class="inline">python manage.py runserver</code></label>
-        <label><input type="checkbox" disabled> В браузере открыт <code class="inline">http://127.0.0.1:8000/</code></label>
-      </div>
-
-      <h3>Все команды одним блоком (первый запуск, cmd)</h3>
-      <pre><code>cd /d C:\путь\к\вашей\папке\ROGA
-python -m venv venv
-venv\Scripts\activate.bat
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver</code></pre>
+      <h3>Проверить, что сервер слушает порт</h3>
+      <pre><code>Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue |
+  Select-Object LocalAddress, LocalPort, State, OwningProcess</code></pre>
     </section>
   </main>
 
   <footer class="wrap">
-    <p>Учебный проект ROGA («Пассажирам.РФ»). Файл можно открыть двойным щелчком в браузере — интернет для просмотра инструкции не нужен.</p>
+    <p>Учебный проект ROGA («Пассажирам.РФ»). Откройте этот HTML двойным щелчком — для просмотра инструкции интернет не нужен. Команды копируйте в PowerShell.</p>
   </footer>
 </body>
 </html>
